@@ -5,8 +5,9 @@ namespace Tests\Feature;
 use App\Models\News;
 use Carbon\Carbon;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Tests\TestCase;
 
-class NewsApiTest extends \Tests\TestCase
+class NewsApiTest extends TestCase
 {
     public function test_get_news_without_filters()
     {
@@ -183,5 +184,12 @@ class NewsApiTest extends \Tests\TestCase
                 ->where('data.0.description', $news->description)
                 ->etc()
             );
+    }
+
+    public function test_get_news_fail()
+    {
+        $this->getJson('api/news?fields=11')->assertStatus(422);
+        $this->getJson('api/news?order_direction=11f23f2f3')->assertStatus(422);
+        $this->getJson('api/news?page=11f23f2f3')->assertStatus(422);
     }
 }

@@ -32,10 +32,21 @@ class GetNewsCommandTest extends TestCase
             $this->assertEquals($item['title'], $news->title);
             $this->assertEquals($item['description'], $news->description);
             $this->assertEquals($item['author'] ?? null, $news->author);
-            if(!empty($item['image'])) {
+            if (!empty($item['image'])) {
                 $this->assertNotNull($news->image_link);
                 $this->assertFileExists($news->image_link);
             }
         }
+    }
+
+    public function test_no_command_overlapping(): void
+    {
+        Log::query()->delete();
+
+        $this->artisan('schedule:run');
+        $this->artisan('schedule:run');
+
+        sleep(2);
+        $this->assertEquals(1, Log::query()->count());
     }
 }

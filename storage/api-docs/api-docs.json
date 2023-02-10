@@ -1,0 +1,189 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "OpenApi Documentation",
+        "description": "RSS News service documentation",
+        "contact": {
+            "name": "Ivaniv Anton",
+            "email": "anton.o.ivaniv@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "",
+            "description": "Основной API"
+        }
+    ],
+    "paths": {
+        "/api/news": {
+            "get": {
+                "description": "Returns 10 news that were received from RSS",
+                "operationId": "getNews",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page for pagination",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": "1"
+                    },
+                    {
+                        "name": "order_direction",
+                        "in": "query",
+                        "description": "Publication datetime order directions",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "asc": {
+                                "summary": "asc"
+                            },
+                            "desc": {
+                                "summary": "desc"
+                            }
+                        }
+                    },
+                    {
+                        "name": "fields[]",
+                        "in": "query",
+                        "description": "Fields to receive from data",
+                        "schema": {
+                            "type": "array",
+                            "items": {}
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful news receiving",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Умер обладатель премий «Гойя» и призов жюри в Каннах Карлос Саура"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Режиссеру был 91 год. На его счету более 50 фильмов, многие из которых получали призы Каннского фестиваля и были номинированы на «Оскар»"
+                                                    },
+                                                    "publication_datetime": {
+                                                        "type": "string",
+                                                        "example": "2023-02-10T17:06:47.000000Z"
+                                                    },
+                                                    "author": {
+                                                        "type": "string",
+                                                        "example": "Мир Ландау",
+                                                        "nullable": true
+                                                    },
+                                                    "image_link": {
+                                                        "type": "string",
+                                                        "example": "http://hi-smith.local/storage/2023/02-10/eb9dd4a77b0999e5e13a0e0ad2de0240.jpg"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "first_page_url": {
+                                            "type": "string",
+                                            "example": "http://hi-smith.local/api/news?page=1"
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": "7"
+                                        },
+                                        "last_page_url": {
+                                            "type": "string",
+                                            "example": "http://hi-smith.local/api/news?page=7"
+                                        },
+                                        "next_page_url": {
+                                            "type": "string",
+                                            "example": "http://hi-smith.local/api/news?page=2",
+                                            "nullable": true
+                                        },
+                                        "path": {
+                                            "type": "string",
+                                            "example": "http://hi-smith.local/api/news"
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": "10"
+                                        },
+                                        "prev_page_url": {
+                                            "type": "string",
+                                            "example": null,
+                                            "nullable": true
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": "10"
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": "123"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Parameters are invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The selected order direction is invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "order_direction": {
+                                                    "type": "array",
+                                                    "items": {},
+                                                    "nullable": true
+                                                },
+                                                "page": {
+                                                    "type": "array",
+                                                    "items": {},
+                                                    "nullable": true
+                                                },
+                                                "fields": {
+                                                    "type": "array",
+                                                    "items": {},
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Over 60 request per minute"
+                    }
+                }
+            }
+        }
+    }
+}
